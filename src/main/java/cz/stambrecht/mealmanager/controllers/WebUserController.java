@@ -12,19 +12,12 @@ import cz.stambrecht.mealmanager.entities.User;
 import cz.stambrecht.mealmanager.repositories.UserRespository;
 
 @Controller
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/users")
+public class WebUserController {
 
-	@Autowired
-	private UserRespository mUserRepository;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public @ResponseBody Iterable<User> getUsers() {
-		return mUserRepository.findAll();
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public @ResponseBody void addUser() {
-		mUserRepository.save(new User("Karel", "Java"));
+	public String getUsers() {
+		return "users";
 	}
 }
