@@ -20,10 +20,18 @@
 
 	<!-- Users table -->
 	<table class="table table-striped" id="users_list">
-		<tr th:each="o : ${users}">
-			<td th:text="${o.getName() + ' ' +  o.getSurname()}">Karel
-				Omáčka</td>
-		</tr>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Jméno</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${users}">
+				<td th:text="${user.getId()}" />
+				<td th:text="${user.getName() + ' ' +  user.getSurname()}" />
+			</tr>
+		</tbody>
 	</table>
 </body>
 </html>
