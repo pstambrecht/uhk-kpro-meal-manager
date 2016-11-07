@@ -1,6 +1,8 @@
 package cz.stambrecht.mealmanager.domain.persistance.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import cz.stambrecht.mealmanager.domain.persistance.entities.User;
 
@@ -10,6 +12,6 @@ import cz.stambrecht.mealmanager.domain.persistance.entities.User;
  * @author pavel
  *
  */
-public interface UserRepository extends CrudRepository<User,Long> {
-	
+public interface UserRepository extends PagingAndSortingRepository<User,Long> {
+
 }
