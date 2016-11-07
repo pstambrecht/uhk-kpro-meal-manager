@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>MealManager</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
-	<link rel="stylesheet" type="text/css" href="../css/style_base.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/style_users.css"/>
+<title>MealManager</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/style_base.css" />
+<link rel="stylesheet" type="text/css" href="../css/style_users.css" />
 </head>
 
 <body>
-<!-- Header -->
-<div th:replace="fragments/navigation_bar::header"></div>
-<a class="btn btn-primary" href="#" th:href="@{/users/create}">Přidat uživatele</a>
+	<!-- Header -->
+	<div th:replace="fragments/navigation_bar::header"></div>
+	<!-- Title -->
+	<h2>Uživatelé</h2>
 
- <table class="table table-striped" id="users_list">
-      <tr th:each="o : ${users}">
-        <td th:text="${o.getName() + ' ' +  o.getSurname()}">Karel Omáčka</td>
-      </tr>
-    </table>
+	<!-- Add new user button -->
+	<a class="btn btn-primary" href="#" th:href="@{/users/create}">Přidat
+		uživatele</a>
+
+	<!-- Users table -->
+	<table class="table table-striped" id="users_list">
+		<tr th:each="o : ${users}">
+			<td th:text="${o.getName() + ' ' +  o.getSurname()}">Karel
+				Omáčka</td>
+		</tr>
+	</table>
 </body>
 </html>

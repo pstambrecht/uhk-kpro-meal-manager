@@ -16,16 +16,16 @@ import cz.stambrecht.mealmanager.services.interfaces.UsersService;
 public class UsersServiceImpl implements UsersService {
 
 	@Autowired
-	private UserRepository mUserRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public List<User> getUsers() {
-		return Lists.newArrayList(mUserRepository.findAll());
+		return Lists.newArrayList(userRepository.findAll());
 	}
 
 	@Override
 	public void createUser(User user) {
-		mUserRepository.save(user);
+		userRepository.save(user);
 
 	}
 
