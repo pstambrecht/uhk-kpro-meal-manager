@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>MealManager</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/style_base.css" />
+</head>
+
+<body>
+	<!-- Header -->
+	<div th:replace="fragments/navigation_bar::header"></div>
+	<!-- Title -->
+	<h2>Jídla</h2>
+
+	<!-- Add new meal button -->
+	<a class="btn btn-primary" href="#" th:href="@{/meals/create}">Vytvořit
+		jídlo</a>
+
+	<!-- Users table -->
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>Jídlo</th>
+				<th>Tvůrce</th>
+				<th>Celková cena</th>
+				<th>Počet porcí</th>
+				<th>Cena za porci</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="meal : ${meals}">
+				<td th:text="${meal.getName()}" />
+				<td th:text="${meal.getOwner().getSurname()}" />
+				<td th:text="${meal.getTotalPrice() + ' Kč'}" />
+				<td th:text="${meal.getPortionCount()}" />
+				<td th:text="${meal.getPortionPrice() + ' Kč'}" />
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

@@ -37,6 +37,12 @@ public class UsersController {
 		return "pages/users";
 	}
 
+	/**
+	 * Returns user create page
+	 * @param user 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(path = "/users/create", method = RequestMethod.GET)
 	public String getCreateUserPage(User user, Model model) {
         model.addAttribute("user", user);
