@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class User {
@@ -13,12 +15,16 @@ public class User {
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long mId;
+	private long id;
 
 	@Column(name = "name")
-	private String mName;
+	@NotNull
+	@Size(min = 3, max = 30, message = "Jméno musí mít minimálně 3 znaky a maximálně 30 znaků")
+	private String name;
 	@Column(name = "surname")
-	private String mSurname;
+	@NotNull
+	@Size(min = 3, max = 30, message = "Příjmení musí mít minimálně 3 znaky a maximálně 30 znaků")
+	private String surname;
 
 	/**
 	 * Empty constructor. Do not use it. It is used only for JPA
@@ -35,8 +41,8 @@ public class User {
 	 *            String value of user surname
 	 */
 	public User(String name, String surname) {
-		mName = name;
-		mSurname = surname;
+		this.name = name;
+		this.surname = surname;
 	}
 
 	/**
@@ -45,7 +51,7 @@ public class User {
 	 * @return return user id
 	 */
 	public long getId() {
-		return mId;
+		return id;
 	}
 
 	/**
@@ -54,7 +60,7 @@ public class User {
 	 * @return String name or empty null
 	 */
 	public String getName() {
-		return mName;
+		return name;
 	}
 
 	/**
@@ -63,8 +69,8 @@ public class User {
 	 * @param mName
 	 *            String value
 	 */
-	public void setName(String mName) {
-		this.mName = mName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**
@@ -73,7 +79,7 @@ public class User {
 	 * @return String surname or null
 	 */
 	public String getSurname() {
-		return mSurname;
+		return surname;
 	}
 
 	/**
@@ -82,12 +88,12 @@ public class User {
 	 * @param mSurname
 	 *            String value
 	 */
-	public void setSurname(String mSurname) {
-		this.mSurname = mSurname;
+	public void setSurname(String surname) {
+		this.surname = surname;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("User[id=%d, name='%s', surname='%s']", mId, mName, mSurname);
+		return String.format("User[id=%d, name='%s', surname='%s']", id, name, surname);
 	}
 }

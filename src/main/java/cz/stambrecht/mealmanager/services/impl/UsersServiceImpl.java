@@ -1,9 +1,10 @@
 package cz.stambrecht.mealmanager.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -16,16 +17,16 @@ import cz.stambrecht.mealmanager.services.interfaces.UsersService;
 public class UsersServiceImpl implements UsersService {
 
 	@Autowired
-	private UserRepository mUserRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public List<User> getUsers() {
-		return Lists.newArrayList(mUserRepository.findAll());
+		return Lists.newArrayList(userRepository.findAll(new Sort(Direction.DESC,"id")));
 	}
 
 	@Override
 	public void createUser(User user) {
-		mUserRepository.save(user);
+		userRepository.save(user);
 
 	}
 

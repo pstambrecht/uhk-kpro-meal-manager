@@ -1,27 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>MealManager</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
-	<link rel="stylesheet" type="text/css" href="../css/style_base.css"/>
-	<link rel="stylesheet" type="text/css" href="../css/style_users.css"/>
+<title>MealManager</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/style_base.css" />
+<link rel="stylesheet" type="text/css" href="../css/style_users.css" />
 </head>
 
 <body>
-<!-- Header -->
-<div th:replace="fragments/navigation_bar::header"></div>
+	<!-- Header -->
+	<div th:replace="fragments/navigation_bar::header"></div>
+	
+	<!-- Title -->
+	<h2>Přidat uživatele</h2>
+	
+	<!-- Create new user form -->
+	<form action="#" th:action="@{/users/create}" th:object="${user}"
+		method="post">
+	
+		<!-- Error messages -->
+		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+			<ul>
+				<li th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
+				<li th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" />
+				
+			</ul>
+		</div>
 
-<form action="#" th:action="@{/users/create}" th:object="${user}" method="post">
-  <div class="form-group">
-    <label for="form_name">Jméno</label>
-    <input type="text" class="form-control" id="form_name" placeholder="Např. Pavel" th:field="*{name}" />
-  </div>
-  <div class="form-group">
-    <label for="form_name">Příjmení</label>
-    <input type="text" class="form-control" id="form_surname" placeholder="Např. Stambrecht" th:field="*{surname}"/>
-  </div>
-  <button type="submit" class="btn btn-primary">Přidat uživatele</button>
-</form>
+		<!-- Input fields -->
+		<div class="form-group">
+			<label for="form_name">Jméno</label> <input type="text"
+				class="form-control" id="form_name" placeholder="Např. Pavel"
+				th:field="*{name}" />
+		</div>
+		<div class="form-group">
+			<label for="form_name">Příjmení</label> <input type="text"
+				class="form-control" id="form_surname"
+				placeholder="Např. Stambrecht" th:field="*{surname}" />
+		</div>
+		
+		<!-- Submit button -->
+		<button type="submit" class="btn btn-primary">Přidat
+			uživatele</button>
+	</form>
 
 
 </body>
