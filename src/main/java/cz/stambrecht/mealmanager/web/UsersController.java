@@ -45,7 +45,6 @@ public class UsersController {
 	
 	@RequestMapping(value = "/users/create", method = RequestMethod.POST)
 	public String createTestUser(@Valid User user, BindingResult bindingResult) {
-		List<FieldError> errors = bindingResult.getFieldErrors();
 		if(bindingResult.hasFieldErrors()){
 			return "pages/users_create";
 		}
