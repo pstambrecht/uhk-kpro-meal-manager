@@ -9,12 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
-import cz.stambrecht.mealmanager.domain.persistance.entities.Meal;
-import cz.stambrecht.mealmanager.domain.persistance.entities.User;
-import cz.stambrecht.mealmanager.domain.persistance.repositories.MealRepository;
-import cz.stambrecht.mealmanager.domain.persistance.repositories.UserRepository;
-import cz.stambrecht.mealmanager.services.interfaces.MealsService;
-import cz.stambrecht.mealmanager.services.interfaces.UsersService;
+import cz.stambrecht.mealmanager.model.Meal;
+import cz.stambrecht.mealmanager.repositories.MealRepository;
+import cz.stambrecht.mealmanager.services.MealsService;
 import cz.stambrecht.mealmanager.utils.MealUtils;
 
 @Service
@@ -29,8 +26,13 @@ public class MealsServiceImpl implements MealsService {
 	}
 
 	@Override
-	public void createMeal(Meal meal) {
+	public Meal createMeal(Meal meal) {
 		meal.setPortionPrice(MealUtils.computePriceForPortion(meal.getTotalPrice(), meal.getPortionCount()));
-		mealRepository.save(meal);
+		return mealRepository.save(meal);
+	}
+
+	@Override
+	public Meal findMealById(long mealId) {
+		return mealRepository.findMealById(mealId);
 	}
 }

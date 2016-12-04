@@ -29,8 +29,8 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="meal : ${meals}">
-				<td th:text="${meal.getName()}" />
+			<tr th:each="meal : ${meals}" class="clickable-row">
+				<td><a th:href="@{|/meals/${meal.getId()}|}" href="#" th:text="${meal.getName()}" ></a></td>
 				<td th:text="${meal.getOwner().getSurname()}" />
 				<td th:text="${meal.getTotalPrice() + ' Kč'}" />
 				<td th:text="${meal.getPortionCount()}" />

@@ -1,4 +1,4 @@
-package cz.stambrecht.mealmanager.domain.persistance.entities;
+package cz.stambrecht.mealmanager.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +36,7 @@ public class Meal {
 	@JoinColumn(name = "owner")
 	@NotNull(message = "Není vybrán tvůrce jídla")
 	@ManyToOne
-	private User owner = null;
+	private User owner;
 
 	/**
 	 * @return the name

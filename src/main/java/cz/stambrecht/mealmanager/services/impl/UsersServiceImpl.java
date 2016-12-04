@@ -6,12 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Lists;
 
-import cz.stambrecht.mealmanager.domain.persistance.entities.User;
-import cz.stambrecht.mealmanager.domain.persistance.repositories.UserRepository;
-import cz.stambrecht.mealmanager.services.interfaces.UsersService;
+import cz.stambrecht.mealmanager.model.User;
+import cz.stambrecht.mealmanager.repositories.UserRepository;
+import cz.stambrecht.mealmanager.services.UsersService;
 
 @Service
 public class UsersServiceImpl implements UsersService {

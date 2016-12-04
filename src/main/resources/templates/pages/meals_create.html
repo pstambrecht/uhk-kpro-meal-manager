@@ -27,8 +27,7 @@
 					th:errors="*{totalPrice}" />
 				<li th:if="${#fields.hasErrors('portionCount')}"
 					th:errors="*{portionCount}" />
-				<li th:if="${#fields.hasErrors('owner')}"
-					th:errors="*{owner}" />
+				<li th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}" />
 			</ul>
 		</div>
 
@@ -40,7 +39,8 @@
 		</div>
 
 		<div class="form-group">
-			<label>Tvůrce</label> <select class="form-control" th:field="*{owner}">
+			<label>Tvůrce</label> <select class="form-control"
+				th:field="*{owner}">
 				<option th:each="user : ${users}" th:value="${user.getId()}"
 					th:text="${user.getName() + ' ' + user.getSurname()}" />
 			</select>
