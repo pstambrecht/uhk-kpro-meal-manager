@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cz.stambrecht.mealmanager.model.Meal;
+import cz.stambrecht.mealmanager.model.MealPortionForm;
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.services.MealsService;
 import cz.stambrecht.mealmanager.services.UsersService;
@@ -63,12 +64,15 @@ public class MealsController {
 	}
 
 	@RequestMapping(path = "/meals/{id}", method = RequestMethod.GET)
-	public String getMealPage(@PathVariable long id, Model model) {
+	public String getMealPage(@PathVariable long id, MealPortionForm mealPortionForm, Model model) {
 		Meal meal = mealsService.findMealById(id);
 		if (meal == null) {
 			throw new ResourceNotFoundException();
 		}
+		mealPortionForm.setMealId(meal.getId());
 		model.addAttribute("meal", meal);
+		model.addAttribute("mealPortionForm", mealPortionForm);
+
 		return "pages/meals_detail";
 	}
 
@@ -87,8 +91,21 @@ public class MealsController {
 		}
 
 		meal = mealsService.createMeal(meal);
-
 		return "redirect:/meals/" + meal.getId();
 	}
 
+	/**
+	 * Handle form post to add new meal portion.
+	 * 
+	 * @param meal
+	 * @param bindingResult
+	 * @return
+	 */
+	@RequestMapping(value = "/meals/portion/create", method = RequestMethod.POST)
+	public String createPortion(MealPortionForm mealPortionForm) {
+		if(!mealsService.addPortionToMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner())){
+			throw new ResourceNotFoundException();
+		}
+		return "redirect:/meals/" + mealPortionForm.getMealId();
+	}
 }

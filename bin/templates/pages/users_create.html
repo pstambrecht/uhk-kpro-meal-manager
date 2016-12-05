@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="UTF-8" />
 <title>MealManager</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
@@ -11,20 +12,20 @@
 <body>
 	<!-- Header -->
 	<div th:replace="fragments/navigation_bar::header"></div>
-	
+
 	<!-- Title -->
 	<h2>Přidat uživatele</h2>
-	
+
 	<!-- Create new user form -->
 	<form action="#" th:action="@{/users/create}" th:object="${user}"
 		method="post">
-	
+
 		<!-- Error messages -->
 		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
 			<ul>
 				<li th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
 				<li th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}" />
-				
+
 			</ul>
 		</div>
 
@@ -39,7 +40,7 @@
 				class="form-control" id="form_surname"
 				placeholder="Např. Stambrecht" th:field="*{surname}" />
 		</div>
-		
+
 		<!-- Submit button -->
 		<button type="submit" class="btn btn-primary">Přidat
 			uživatele</button>

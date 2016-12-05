@@ -9,11 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class User {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class User extends AbstractEntityObject{
 
 	@Column(name = "name")
 	@NotNull

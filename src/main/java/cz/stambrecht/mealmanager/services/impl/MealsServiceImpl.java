@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import cz.stambrecht.mealmanager.model.Meal;
+import cz.stambrecht.mealmanager.model.Portion;
+import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.repositories.MealRepository;
 import cz.stambrecht.mealmanager.services.MealsService;
 import cz.stambrecht.mealmanager.utils.MealUtils;
@@ -27,7 +29,6 @@ public class MealsServiceImpl implements MealsService {
 
 	@Override
 	public Meal createMeal(Meal meal) {
-		meal.setPortionPrice(MealUtils.computePriceForPortion(meal.getTotalPrice(), meal.getPortionCount()));
 		return mealRepository.save(meal);
 	}
 
@@ -35,4 +36,30 @@ public class MealsServiceImpl implements MealsService {
 	public Meal findMealById(long mealId) {
 		return mealRepository.findMealById(mealId);
 	}
+
+	@Override
+	public boolean addPortionToMealWithId(long mealId, User diner) {
+		Meal meal = findMealById(mealId);
+		if(meal == null){
+			return false;
+		}
+		
+		//find portion
+		Portion portion = null;
+		for(Portion p: meal.getPortions()){
+			if(p.getDiner().equals(diner)){
+				p.setCount(p.getCount()+1);
+				portion = p;
+				break;
+			}
+		}
+		
+		if(portion == null){		
+			meal.getPortions().add(new Portion(diner));
+		}
+		mealRepository.save(meal);
+		return true;
+	}
+	
+	
 }

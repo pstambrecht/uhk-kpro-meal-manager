@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<meta charset="UTF-8" />
 <title>MealManager</title>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
@@ -22,7 +23,7 @@
 		<thead>
 			<tr>
 				<th>Jídlo</th>
-				<th>Tvůrce</th>
+				<th>Kuchař</th>
 				<th>Celková cena</th>
 				<th>Počet porcí</th>
 				<th>Cena za porci</th>
@@ -30,10 +31,11 @@
 		</thead>
 		<tbody>
 			<tr th:each="meal : ${meals}" class="clickable-row">
-				<td><a th:href="@{|/meals/${meal.getId()}|}" href="#" th:text="${meal.getName()}" ></a></td>
+				<td><a th:href="@{|/meals/${meal.getId()}|}" href="#"
+					th:text="${meal.getName()}"></a></td>
 				<td th:text="${meal.getOwner().getSurname()}" />
 				<td th:text="${meal.getTotalPrice() + ' Kč'}" />
-				<td th:text="${meal.getPortionCount()}" />
+				<td th:text="${meal.getPortions().size()}" />
 				<td th:text="${meal.getPortionPrice() + ' Kč'}" />
 			</tr>
 		</tbody>
