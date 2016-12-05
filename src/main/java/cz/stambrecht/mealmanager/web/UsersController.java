@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import cz.stambrecht.mealmanager.domain.persistance.entities.User;
-import cz.stambrecht.mealmanager.services.interfaces.UsersService;
+import cz.stambrecht.mealmanager.model.User;
+import cz.stambrecht.mealmanager.services.UsersService;
 
 @Controller
 public class UsersController {
@@ -37,6 +37,12 @@ public class UsersController {
 		return "pages/users";
 	}
 
+	/**
+	 * Returns user create page
+	 * @param user 
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(path = "/users/create", method = RequestMethod.GET)
 	public String getCreateUserPage(User user, Model model) {
         model.addAttribute("user", user);
@@ -51,7 +57,6 @@ public class UsersController {
 		userService.createUser(user);
 		return "redirect:/users";
 	}
-	
-	
+
 
 }

@@ -8,7 +8,11 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class MealManagerApplication {
-
+	
+	/**
+	 * Main method. Starts SpringApplication
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(MealManagerApplication.class, args);
 	}

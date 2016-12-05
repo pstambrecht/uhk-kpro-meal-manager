@@ -1,4 +1,4 @@
-package cz.stambrecht.mealmanager.domain.persistance.entities;
+package cz.stambrecht.mealmanager.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,13 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class User {
-	/**
-	 * Attributes
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+public class User extends AbstractEntityObject{
 
 	@Column(name = "name")
 	@NotNull
