@@ -47,4 +47,7 @@ public interface MealsService {
 	 * @return true if was added
 	 */
 	public boolean removePortionFromMealWithId(long mealId, User diner);
+	
+	
+	public boolean setStateOfMealWithId(long mealId, Meal.State state);
 }
