@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>MealManager</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/style_base.css" />
+<link rel="stylesheet" type="text/css" href="../css/style_users.css" />
+</head>
+
+<body>
+	<!-- Header -->
+	<div th:replace="fragments/navigation_bar::header"></div>
+
+	<!-- Title -->
+	<h2>Vytvořit jídlo</h2>
+
+	<!-- Create new user form -->
+	<form action="#" th:action="@{/meals/create}" th:object="${meal}"
+		method="post">
+
+		<!-- Error messages -->
+		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+			<ul>
+				<li th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
+				<li th:if="${#fields.hasErrors('totalPrice')}"
+					th:errors="*{totalPrice}" />
+				<li th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}" />
+			</ul>
+		</div>
+
+		<!-- Input fields -->
+		<div class="form-group">
+			<label for="form_name">Název jídla</label> <input type="text"
+				class="form-control" placeholder="Např. Těstovinový salát"
+				th:field="*{name}" />
+		</div>
+
+		<div class="form-group">
+			<label>Tvůrce</label> <select class="form-control"
+				th:field="*{owner}">
+				<option th:each="user : ${users}" th:value="${user.getId()}"
+					th:text="${user.getName() + ' ' + user.getSurname()}" />
+			</select>
+		</div>
+
+		<div class="form-group">
+			<label>Celková cena</label> <input type="number" step="0.1"
+				class="form-control" placeholder="Např. 200"
+				th:field="*{totalPrice}" />
+		</div>
+
+		<!-- Submit button -->
+		<button type="submit" class="btn btn-primary">Vytvořit jídlo</button>
+	</form>
+
+
+</body>
+</html>
