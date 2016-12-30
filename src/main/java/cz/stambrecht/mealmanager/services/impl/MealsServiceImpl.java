@@ -3,6 +3,8 @@ package cz.stambrecht.mealmanager.services.impl;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,13 +18,16 @@ import cz.stambrecht.mealmanager.model.Portion;
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.repositories.MealRepository;
 import cz.stambrecht.mealmanager.services.MealsService;
-import cz.stambrecht.mealmanager.utils.MealUtils;
+import cz.stambrecht.mealmanager.services.TransactionsService;
 
 @Service
 public class MealsServiceImpl implements MealsService {
 
 	@Autowired
 	private MealRepository mealRepository;
+	
+	@Autowired
+	private TransactionsService transactionsService;
 
 	@Override
 	public List<Meal> getMeals() {
@@ -89,12 +94,14 @@ public class MealsServiceImpl implements MealsService {
 	}
 
 	@Override
-	public boolean setStateOfMealWithId(long mealId, State state) {
+	@Transactional
+	public boolean closeMealWithId(long mealId) {
 		Meal meal = findMealById(mealId);
 		if (meal == null) {
 			return false;
 		}
-		meal.setState(state);
+		meal.setState(Meal.State.CLOSED);
+		transactionsService.createTransactionsFromMeal(meal);
 		mealRepository.save(meal);
 		return true;
 	}

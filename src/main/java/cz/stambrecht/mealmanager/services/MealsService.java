@@ -49,5 +49,5 @@ public interface MealsService {
 	public boolean removePortionFromMealWithId(long mealId, User diner);
 	
 	
-	public boolean setStateOfMealWithId(long mealId, Meal.State state);
+	public boolean closeMealWithId(long mealId);
 }

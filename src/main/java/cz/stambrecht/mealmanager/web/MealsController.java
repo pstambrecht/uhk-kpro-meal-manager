@@ -17,6 +17,7 @@ import cz.stambrecht.mealmanager.model.Meal;
 import cz.stambrecht.mealmanager.model.MealPortionForm;
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.services.MealsService;
+import cz.stambrecht.mealmanager.services.TransactionsService;
 import cz.stambrecht.mealmanager.services.UsersService;
 import cz.stambrecht.mealmanager.web.errors.ResourceNotFoundException;
 
@@ -134,9 +135,7 @@ public class MealsController {
 	 */
 	@RequestMapping(value = "/meals/{id}/close", method = RequestMethod.POST)
 	public String closeMeal(@PathVariable long id) {
-		if(mealsService.setStateOfMealWithId(id, Meal.State.CLOSED)){
-			//TODO write transactions
-		}
+		mealsService.closeMealWithId(id);
 		return "redirect:/meals/" + id;
 	}
 }
