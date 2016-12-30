@@ -125,4 +125,18 @@ public class MealsController {
 		mealsService.removePortionFromMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner());
 		return "redirect:/meals/" + mealPortionForm.getMealId();
 	}
+
+	/**
+	 * Handle form post to remove meal portion.
+	 * 
+	 * @param meal
+	 * @return
+	 */
+	@RequestMapping(value = "/meals/{id}/close", method = RequestMethod.POST)
+	public String closeMeal(@PathVariable long id) {
+		if(mealsService.setStateOfMealWithId(id, Meal.State.CLOSED)){
+			//TODO write transactions
+		}
+		return "redirect:/meals/" + id;
+	}
 }

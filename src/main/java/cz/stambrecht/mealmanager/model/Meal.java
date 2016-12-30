@@ -6,13 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,6 +19,11 @@ import cz.stambrecht.mealmanager.utils.MealUtils;
 
 @Entity
 public class Meal extends AbstractEntityObject {
+	
+	public enum State{
+		OPENED,
+		CLOSED
+	}
 	/**
 	 * Attributes
 	 */
@@ -31,6 +34,9 @@ public class Meal extends AbstractEntityObject {
 	@Column(name = "total_price")
 	@Min(value = 0, message = "Celková cena musí být větší nebo rovna 0 Kč")
 	private float totalPrice;
+	@Column(name = "state")
+	@Enumerated(EnumType.STRING)
+	private State state = State.OPENED;
 	@JoinColumn(name = "owner")
 	@NotNull(message = "Není vybrán tvůrce jídla")
 	@ManyToOne
@@ -82,6 +88,21 @@ public class Meal extends AbstractEntityObject {
 	 */
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+	
+
+	/**
+	 * @return the state
+	 */
+	public State getState() {
+		return state;
+	}
+
+	/**
+	 * @param state the state to set
+	 */
+	public void setState(State state) {
+		this.state = state;
 	}
 
 	/**

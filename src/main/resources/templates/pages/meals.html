@@ -36,7 +36,7 @@
 				<td th:text="${meal.getOwner().getSurname()}" />
 				<td th:text="${meal.getTotalPrice() + ' Kč'}" />
 				<td th:text="${meal.getPortionsCount()}" />
-				<td th:text="${#numbers.formatDecimal(meal.getPortionPrice(), 0, 'DEFAULT', 2, 'DEFAULT') + ' Kč'}" />
+				<td th:text="${#numbers.formatDecimal(meal.getPortionPrice(), 1, 'DEFAULT', 2, 'DEFAULT') + ' Kč'}" />
 			</tr>
 		</tbody>
 	</table>

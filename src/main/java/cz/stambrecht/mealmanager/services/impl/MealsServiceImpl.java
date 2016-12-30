@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import cz.stambrecht.mealmanager.model.Meal;
+import cz.stambrecht.mealmanager.model.Meal.State;
 import cz.stambrecht.mealmanager.model.Portion;
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.repositories.MealRepository;
@@ -25,7 +26,7 @@ public class MealsServiceImpl implements MealsService {
 
 	@Override
 	public List<Meal> getMeals() {
-		return  Lists.newArrayList(mealRepository.findAll(new Sort(Direction.DESC, "id")));
+		return Lists.newArrayList(mealRepository.findAll(new Sort(Direction.DESC, "id")));
 	}
 
 	@Override
@@ -68,7 +69,7 @@ public class MealsServiceImpl implements MealsService {
 		if (meal == null) {
 			return false;
 		}
-		
+
 		// find portion and decrease count or remove it from meal
 		Iterator<Portion> portionIterator = meal.getPortions().iterator();
 		Portion portion = null;
@@ -85,6 +86,17 @@ public class MealsServiceImpl implements MealsService {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean setStateOfMealWithId(long mealId, State state) {
+		Meal meal = findMealById(mealId);
+		if (meal == null) {
+			return false;
+		}
+		meal.setState(state);
+		mealRepository.save(meal);
+		return true;
 	}
 
 }
