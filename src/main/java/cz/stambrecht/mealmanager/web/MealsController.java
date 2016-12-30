@@ -103,9 +103,26 @@ public class MealsController {
 	 */
 	@RequestMapping(value = "/meals/portion/create", method = RequestMethod.POST)
 	public String createPortion(MealPortionForm mealPortionForm) {
-		if(!mealsService.addPortionToMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner())){
+		if (!mealsService.addPortionToMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner())) {
 			throw new ResourceNotFoundException();
 		}
+		return "redirect:/meals/" + mealPortionForm.getMealId();
+	}
+
+	/**
+	 * Handle form post to remove meal portion.
+	 * 
+	 * @param meal
+	 * @return
+	 */
+	@RequestMapping(value = "/meals/portion/remove", method = RequestMethod.POST)
+	public String removePortion(MealPortionForm mealPortionForm) {
+		System.out.println("" + mealPortionForm.getMealId());
+		if (mealPortionForm.getDiner() == null) {
+			System.out.println("Diner is null");
+		}
+
+		mealsService.removePortionFromMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner());
 		return "redirect:/meals/" + mealPortionForm.getMealId();
 	}
 }
