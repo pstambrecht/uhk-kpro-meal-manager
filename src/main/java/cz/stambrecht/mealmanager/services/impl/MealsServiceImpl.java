@@ -1,5 +1,6 @@
 package cz.stambrecht.mealmanager.services.impl;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class MealsServiceImpl implements MealsService {
 
 	@Override
 	public List<Meal> getMeals() {
-		return Lists.newArrayList(mealRepository.findAll(new Sort(Direction.DESC, "id")));
+		return  Lists.newArrayList(mealRepository.findAll(new Sort(Direction.DESC, "id")));
 	}
 
 	@Override
@@ -40,26 +41,50 @@ public class MealsServiceImpl implements MealsService {
 	@Override
 	public boolean addPortionToMealWithId(long mealId, User diner) {
 		Meal meal = findMealById(mealId);
-		if(meal == null){
+		if (meal == null) {
 			return false;
 		}
-		
-		//find portion
+
+		// find portion
 		Portion portion = null;
-		for(Portion p: meal.getPortions()){
-			if(p.getDiner().equals(diner)){
-				p.setCount(p.getCount()+1);
+		for (Portion p : meal.getPortions()) {
+			if (p.getDiner().equals(diner)) {
+				p.setCount(p.getCount() + 1);
 				portion = p;
 				break;
 			}
 		}
-		
-		if(portion == null){		
+
+		if (portion == null) {
 			meal.getPortions().add(new Portion(diner));
 		}
 		mealRepository.save(meal);
 		return true;
 	}
-	
-	
+
+	@Override
+	public boolean removePortionFromMealWithId(long mealId, User diner) {
+		Meal meal = findMealById(mealId);
+		if (meal == null) {
+			return false;
+		}
+		
+		// find portion and decrease count or remove it from meal
+		Iterator<Portion> portionIterator = meal.getPortions().iterator();
+		Portion portion = null;
+		while (portionIterator.hasNext()) {
+			portion = portionIterator.next();
+			if (portion.getDiner().equals(diner)) {
+				if (portion.getCount() > 1) {
+					portion.setCount(portion.getCount() - 1);
+				} else {
+					portionIterator.remove();
+				}
+				mealRepository.save(meal);
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

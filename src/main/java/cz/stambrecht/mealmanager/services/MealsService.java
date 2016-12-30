@@ -38,4 +38,13 @@ public interface MealsService {
 	 * @return true if was added
 	 */
 	public boolean addPortionToMealWithId(long mealId, User diner);
+	
+	/**
+	 * Remove portion from meal
+	 * 
+	 * @param mealId
+	 *            meal id
+	 * @return true if was added
+	 */
+	public boolean removePortionFromMealWithId(long mealId, User diner);
 }

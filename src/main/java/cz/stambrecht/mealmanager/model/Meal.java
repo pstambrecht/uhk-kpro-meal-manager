@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,7 +36,7 @@ public class Meal extends AbstractEntityObject {
 	@ManyToOne
 	private User owner;
 	@JoinColumn(name = "portions")
-	@OneToMany(cascade = {CascadeType.ALL})
+	@OneToMany(cascade = { CascadeType.ALL })
 	private List<Portion> portions = new ArrayList<>();
 
 	/**
@@ -84,6 +85,7 @@ public class Meal extends AbstractEntityObject {
 	}
 
 	/**
+	 * One portion in list may represents more portions in real (depends on portions count)
 	 * @return the portions
 	 */
 	public List<Portion> getPortions() {
@@ -91,10 +93,24 @@ public class Meal extends AbstractEntityObject {
 	}
 
 	/**
+	 * Returns total portions count
+	 * 
+	 * @return
+	 */
+	public int getPortionsCount() {
+		int count = 0;
+		for (Portion p : portions) {
+			count += p.getCount();
+		}
+		return count;
+	}
+
+	/**
 	 * 
 	 * @return
 	 */
 	public float getPortionPrice() {
-		return MealUtils.computePriceForPortion(totalPrice, !portions.isEmpty() ? portions.size() : 1);
+		int portionsCount = getPortionsCount();
+		return MealUtils.computePriceForPortion(totalPrice, portionsCount != 0 ? portionsCount : 1);
 	}
 }
