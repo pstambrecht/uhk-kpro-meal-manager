@@ -16,7 +16,7 @@ public class TransactionsController {
 	private TransactionsService transactionsService;
 	
 	/**
-	 * Returns user page
+	 * Transactions page getter
 	 * 
 	 * @param model
 	 * @return

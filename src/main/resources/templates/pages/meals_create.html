@@ -23,6 +23,7 @@
 		<!-- Error messages -->
 		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
 			<ul>
+				<li th:if="${#fields.hasErrors('global')}" th:errors="*{global}" />
 				<li th:if="${#fields.hasErrors('name')}" th:errors="*{name}" />
 				<li th:if="${#fields.hasErrors('totalPrice')}"
 					th:errors="*{totalPrice}" />

@@ -5,6 +5,7 @@ import java.util.List;
 import cz.stambrecht.mealmanager.model.Meal;
 import cz.stambrecht.mealmanager.model.Portion;
 import cz.stambrecht.mealmanager.model.User;
+import javassist.NotFoundException;
 
 public interface MealsService {
 
@@ -20,7 +21,7 @@ public interface MealsService {
 	 * 
 	 * @param meal
 	 */
-	public Meal createMeal(Meal meal);
+	public Meal createMeal(Meal meal) throws NullPointerException;
 
 	/**
 	 * Find meal by id.
@@ -37,17 +38,21 @@ public interface MealsService {
 	 *            meal id
 	 * @return true if was added
 	 */
-	public boolean addPortionToMealWithId(long mealId, User diner);
-	
+	public void addPortionToMealWithId(long mealId, User diner) throws NullPointerException, NotFoundException;
+
 	/**
 	 * Remove portion from meal
 	 * 
 	 * @param mealId
 	 *            meal id
-	 * @return true if was added
 	 */
-	public boolean removePortionFromMealWithId(long mealId, User diner);
-	
-	
-	public boolean closeMealWithId(long mealId);
+	public void removePortionFromMealWithId(long mealId, User diner) throws NullPointerException, NotFoundException;
+
+	/**
+	 * Close meal and generate transactions
+	 * 
+	 * @param mealId
+	 * @return
+	 */
+	public void closeMealWithId(long mealId) throws NotFoundException;
 }

@@ -19,13 +19,14 @@ import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.repositories.MealRepository;
 import cz.stambrecht.mealmanager.services.MealsService;
 import cz.stambrecht.mealmanager.services.TransactionsService;
+import javassist.NotFoundException;
 
 @Service
 public class MealsServiceImpl implements MealsService {
 
 	@Autowired
 	private MealRepository mealRepository;
-	
+
 	@Autowired
 	private TransactionsService transactionsService;
 
@@ -35,7 +36,12 @@ public class MealsServiceImpl implements MealsService {
 	}
 
 	@Override
-	public Meal createMeal(Meal meal) {
+	public Meal createMeal(Meal meal) throws NullPointerException {
+
+		if (meal == null) {
+			throw new NullPointerException("Meal is null");
+		}
+
 		return mealRepository.save(meal);
 	}
 
@@ -45,10 +51,15 @@ public class MealsServiceImpl implements MealsService {
 	}
 
 	@Override
-	public boolean addPortionToMealWithId(long mealId, User diner) {
+	public void addPortionToMealWithId(long mealId, User diner) throws NullPointerException, NotFoundException {
+		if (diner == null) {
+			throw new NotFoundException("Diner is null");
+		}
+
 		Meal meal = findMealById(mealId);
+
 		if (meal == null) {
-			return false;
+			throw new NotFoundException("Meal not found");
 		}
 
 		// find portion
@@ -65,14 +76,18 @@ public class MealsServiceImpl implements MealsService {
 			meal.getPortions().add(new Portion(diner));
 		}
 		mealRepository.save(meal);
-		return true;
 	}
 
 	@Override
-	public boolean removePortionFromMealWithId(long mealId, User diner) {
+	public void removePortionFromMealWithId(long mealId, User diner) throws NullPointerException, NotFoundException {
+		if (diner == null) {
+			throw new NotFoundException("Diner is null");
+		}
+
 		Meal meal = findMealById(mealId);
+
 		if (meal == null) {
-			return false;
+			throw new NotFoundException("Meal not found");
 		}
 
 		// find portion and decrease count or remove it from meal
@@ -87,23 +102,20 @@ public class MealsServiceImpl implements MealsService {
 					portionIterator.remove();
 				}
 				mealRepository.save(meal);
-				return true;
 			}
 		}
-		return false;
 	}
 
 	@Override
 	@Transactional
-	public boolean closeMealWithId(long mealId) {
+	public void closeMealWithId(long mealId) throws NotFoundException {
 		Meal meal = findMealById(mealId);
 		if (meal == null) {
-			return false;
+			throw new NotFoundException("Meal not found");
 		}
 		meal.setState(Meal.State.CLOSED);
 		transactionsService.createTransactionsFromMeal(meal);
 		mealRepository.save(meal);
-		return true;
 	}
 
 }

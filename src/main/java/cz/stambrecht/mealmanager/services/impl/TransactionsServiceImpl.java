@@ -23,34 +23,35 @@ import cz.stambrecht.mealmanager.services.TransactionsService;
 @Service
 public class TransactionsServiceImpl implements TransactionsService {
 
+	/**
+	 * Attributes
+	 */
 	@Autowired
 	private TransactionRepository transactionRepository;
 
 	@Override
+	public List<Transaction> getTransactions() {
+		return Lists.newArrayList(transactionRepository.findAll(new Sort(Direction.DESC, "id")));
+	}
+
+	@Override
 	@Transactional
-	public boolean createTransactionsFromMeal(Meal meal) {
+	public void createTransactionsFromMeal(Meal meal) throws NullPointerException {
 		if (meal == null) {
-			return false;
+			throw new NullPointerException();
 		}
 
 		// save chef money
 		transactionRepository.save(new Transaction(meal.getOwner(), meal.getTotalPrice(),
 				meal.getOwner().getName() + " " + meal.getOwner().getSurname() + " uvařil(a) jídlo " + meal.getName()));
 
+		// save diner money
 		float portionPrice = meal.getPortionPrice();
 		for (Portion portion : meal.getPortions()) {
 			transactionRepository.save(new Transaction(portion.getDiner(), -portion.getCount() * portionPrice,
 					portion.getDiner().getName() + " " + portion.getDiner().getSurname() + " jedl(a) "
 							+ portion.getCount() + " ks jídla " + meal.getName()));
 		}
-
-		return true;
-	}
-
-	@Override
-	public List<Transaction> getTransactions() {
-		return Lists.newArrayList(transactionRepository.findAll(new Sort(Direction.DESC, "id")));
-
 	}
 
 	@Override
@@ -67,7 +68,6 @@ public class TransactionsServiceImpl implements TransactionsService {
 			}
 			sortedTransSum.put(transaction.getUser().getId(), sum);
 		}
-
 		return sortedTransSum;
 	}
 
