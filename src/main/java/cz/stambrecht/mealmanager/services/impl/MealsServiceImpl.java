@@ -3,6 +3,8 @@ package cz.stambrecht.mealmanager.services.impl;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -16,7 +18,8 @@ import cz.stambrecht.mealmanager.model.Portion;
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.repositories.MealRepository;
 import cz.stambrecht.mealmanager.services.MealsService;
-import cz.stambrecht.mealmanager.utils.MealUtils;
+import cz.stambrecht.mealmanager.services.TransactionsService;
+import javassist.NotFoundException;
 
 @Service
 public class MealsServiceImpl implements MealsService {
@@ -24,13 +27,21 @@ public class MealsServiceImpl implements MealsService {
 	@Autowired
 	private MealRepository mealRepository;
 
+	@Autowired
+	private TransactionsService transactionsService;
+
 	@Override
 	public List<Meal> getMeals() {
 		return Lists.newArrayList(mealRepository.findAll(new Sort(Direction.DESC, "id")));
 	}
 
 	@Override
-	public Meal createMeal(Meal meal) {
+	public Meal createMeal(Meal meal) throws NullPointerException {
+
+		if (meal == null) {
+			throw new NullPointerException("Meal is null");
+		}
+
 		return mealRepository.save(meal);
 	}
 
@@ -40,10 +51,15 @@ public class MealsServiceImpl implements MealsService {
 	}
 
 	@Override
-	public boolean addPortionToMealWithId(long mealId, User diner) {
+	public void addPortionToMealWithId(long mealId, User diner) throws NullPointerException, NotFoundException {
+		if (diner == null) {
+			throw new NotFoundException("Diner is null");
+		}
+
 		Meal meal = findMealById(mealId);
+
 		if (meal == null) {
-			return false;
+			throw new NotFoundException("Meal not found");
 		}
 
 		// find portion
@@ -60,14 +76,18 @@ public class MealsServiceImpl implements MealsService {
 			meal.getPortions().add(new Portion(diner));
 		}
 		mealRepository.save(meal);
-		return true;
 	}
 
 	@Override
-	public boolean removePortionFromMealWithId(long mealId, User diner) {
+	public void removePortionFromMealWithId(long mealId, User diner) throws NullPointerException, NotFoundException {
+		if (diner == null) {
+			throw new NotFoundException("Diner is null");
+		}
+
 		Meal meal = findMealById(mealId);
+
 		if (meal == null) {
-			return false;
+			throw new NotFoundException("Meal not found");
 		}
 
 		// find portion and decrease count or remove it from meal
@@ -82,21 +102,20 @@ public class MealsServiceImpl implements MealsService {
 					portionIterator.remove();
 				}
 				mealRepository.save(meal);
-				return true;
 			}
 		}
-		return false;
 	}
 
 	@Override
-	public boolean setStateOfMealWithId(long mealId, State state) {
+	@Transactional
+	public void closeMealWithId(long mealId) throws NotFoundException {
 		Meal meal = findMealById(mealId);
 		if (meal == null) {
-			return false;
+			throw new NotFoundException("Meal not found");
 		}
-		meal.setState(state);
+		meal.setState(Meal.State.CLOSED);
+		transactionsService.createTransactionsFromMeal(meal);
 		mealRepository.save(meal);
-		return true;
 	}
 
 }

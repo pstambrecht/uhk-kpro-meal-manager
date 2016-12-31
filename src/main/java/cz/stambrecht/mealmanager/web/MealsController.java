@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,8 +18,10 @@ import cz.stambrecht.mealmanager.model.Meal;
 import cz.stambrecht.mealmanager.model.MealPortionForm;
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.services.MealsService;
+import cz.stambrecht.mealmanager.services.TransactionsService;
 import cz.stambrecht.mealmanager.services.UsersService;
 import cz.stambrecht.mealmanager.web.errors.ResourceNotFoundException;
+import javassist.NotFoundException;
 
 @Controller
 public class MealsController {
@@ -39,7 +42,7 @@ public class MealsController {
 	}
 
 	/**
-	 * Returns user page
+	 * Meals list page getter
 	 * 
 	 * @param model
 	 * @return
@@ -51,18 +54,13 @@ public class MealsController {
 	}
 
 	/**
-	 * Returns create meal page
+	 * Meal detail page getter
 	 * 
-	 * @param user
+	 * @param id
+	 * @param mealPortionForm
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(path = "/meals/create", method = RequestMethod.GET)
-	public String getCreateMealPage(Meal meal, Model model) {
-		model.addAttribute("meal", meal);
-		return "pages/meals_create";
-	}
-
 	@RequestMapping(path = "/meals/{id}", method = RequestMethod.GET)
 	public String getMealPage(@PathVariable long id, MealPortionForm mealPortionForm, Model model) {
 		Meal meal = mealsService.findMealById(id);
@@ -74,6 +72,19 @@ public class MealsController {
 		model.addAttribute("mealPortionForm", mealPortionForm);
 
 		return "pages/meals_detail";
+	}
+
+	/**
+	 * Create new meal getter
+	 * 
+	 * @param user
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(path = "/meals/create", method = RequestMethod.GET)
+	public String getCreateMealPage(Meal meal, Model model) {
+		model.addAttribute("meal", meal);
+		return "pages/meals_create";
 	}
 
 	/**
@@ -90,7 +101,13 @@ public class MealsController {
 			return "pages/meals_create";
 		}
 
-		meal = mealsService.createMeal(meal);
+		try {
+			meal = mealsService.createMeal(meal);
+		} catch (NullPointerException e) {
+			System.out.println(e.toString());
+			bindingResult.addError(new ObjectError("global", "Ups! Vyskytla se chyba."));
+			return "pages/meals_create";
+		}
 		return "redirect:/meals/" + meal.getId();
 	}
 
@@ -103,9 +120,12 @@ public class MealsController {
 	 */
 	@RequestMapping(value = "/meals/portion/create", method = RequestMethod.POST)
 	public String createPortion(MealPortionForm mealPortionForm) {
-		if (!mealsService.addPortionToMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner())) {
+		try {
+			mealsService.addPortionToMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner());
+		} catch (NullPointerException | NotFoundException e) {
 			throw new ResourceNotFoundException();
 		}
+
 		return "redirect:/meals/" + mealPortionForm.getMealId();
 	}
 
@@ -118,11 +138,12 @@ public class MealsController {
 	@RequestMapping(value = "/meals/portion/remove", method = RequestMethod.POST)
 	public String removePortion(MealPortionForm mealPortionForm) {
 		System.out.println("" + mealPortionForm.getMealId());
-		if (mealPortionForm.getDiner() == null) {
-			System.out.println("Diner is null");
+		try {
+			mealsService.removePortionFromMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner());
+		} catch (NullPointerException | NotFoundException e) {
+			// TODO Create better reaction in future
+			throw new ResourceNotFoundException();
 		}
-
-		mealsService.removePortionFromMealWithId(mealPortionForm.getMealId(), mealPortionForm.getDiner());
 		return "redirect:/meals/" + mealPortionForm.getMealId();
 	}
 
@@ -134,8 +155,11 @@ public class MealsController {
 	 */
 	@RequestMapping(value = "/meals/{id}/close", method = RequestMethod.POST)
 	public String closeMeal(@PathVariable long id) {
-		if(mealsService.setStateOfMealWithId(id, Meal.State.CLOSED)){
-			//TODO write transactions
+		try {
+			mealsService.closeMealWithId(id);
+		} catch (NotFoundException e) {
+			// TODO Create better reaction in future
+			throw new ResourceNotFoundException();
 		}
 		return "redirect:/meals/" + id;
 	}

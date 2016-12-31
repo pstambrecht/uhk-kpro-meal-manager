@@ -25,12 +25,18 @@
 			<tr>
 				<th>ID</th>
 				<th>Jméno</th>
+				<th>Stav konta</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="user : ${users}">
 				<td th:text="${user.getId()}" />
 				<td th:text="${user.getName() + ' ' +  user.getSurname()}" />
+				<td th:if="${usersMoneySum.get(user.getId()) != null}" th:text="${usersMoneySum.get(user.getId()) + ' Kč'}"></td>
+				<td th:unless="${usersMoneySum.get(user.getId()) != null}">0 Kč</td>
+				<td><a th:href="@{|/users/${user.getId()}/edit|}" href="#"
+					th:text="Upravit"></a></td>
 			</tr>
 		</tbody>
 	</table>
