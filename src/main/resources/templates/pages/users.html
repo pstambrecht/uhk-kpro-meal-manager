@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>MealManager</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></link>
+<link rel="stylesheet" type="text/css" href="../css/style_base.css" />
+<link rel="stylesheet" type="text/css" href="../css/style_users.css" />
+</head>
+
+<body>
+	<!-- Header -->
+	<div th:replace="fragments/navigation_bar::header"></div>
+	<!-- Title -->
+	<h2>Uživatelé</h2>
+
+	<!-- Add new user button -->
+	<a class="btn btn-primary" href="#" th:href="@{/users/create}">Přidat
+		uživatele</a>
+
+	<!-- Users table -->
+	<table class="table table-striped" id="users_list">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Jméno</th>
+				<th>Stav konta</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${users}">
+				<td th:text="${user.getId()}" />
+				<td th:text="${user.getName() + ' ' +  user.getSurname()}" />
+				<td th:if="${usersMoneySum.get(user.getId()) != null}" th:text="${usersMoneySum.get(user.getId()) + ' Kč'}"></td>
+				<td th:unless="${usersMoneySum.get(user.getId()) != null}">0 Kč</td>
+				<td><a th:href="@{|/users/${user.getId()}/edit|}" href="#"
+					th:text="Upravit"></a></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
