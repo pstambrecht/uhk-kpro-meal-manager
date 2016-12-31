@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import cz.stambrecht.mealmanager.model.User;
+import cz.stambrecht.mealmanager.services.TransactionsService;
 import cz.stambrecht.mealmanager.services.UsersService;
 
 @Controller
@@ -24,6 +25,9 @@ public class UsersController {
 
 	@Autowired
 	private UsersService userService;
+
+	@Autowired
+	private TransactionsService transactionsService;
 
 	/**
 	 * Returns user page
@@ -34,29 +38,30 @@ public class UsersController {
 	@RequestMapping(path = "/users", method = RequestMethod.GET)
 	public String getUsersPage(Model model) {
 		model.addAttribute("users", userService.getUsers());
+		model.addAttribute("usersMoneySum", transactionsService.getTransactionsSumSortedByUserId());
 		return "pages/users";
 	}
 
 	/**
 	 * Returns user create page
-	 * @param user 
+	 * 
+	 * @param user
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(path = "/users/create", method = RequestMethod.GET)
 	public String getCreateUserPage(User user, Model model) {
-        model.addAttribute("user", user);
+		model.addAttribute("user", user);
 		return "pages/users_create";
 	}
-	
+
 	@RequestMapping(value = "/users/create", method = RequestMethod.POST)
 	public String createTestUser(@Valid User user, BindingResult bindingResult) {
-		if(bindingResult.hasFieldErrors()){
+		if (bindingResult.hasFieldErrors()) {
 			return "pages/users_create";
 		}
 		userService.createUser(user);
 		return "redirect:/users";
 	}
-
 
 }

@@ -1,6 +1,8 @@
 package cz.stambrecht.mealmanager.services.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -33,13 +35,13 @@ public class TransactionsServiceImpl implements TransactionsService {
 
 		// save chef money
 		transactionRepository.save(new Transaction(meal.getOwner(), meal.getTotalPrice(),
-				meal.getOwner().getName() + " " + meal.getOwner().getName() + " uvařil jídlo " + meal.getName()));
+				meal.getOwner().getName() + " " + meal.getOwner().getSurname() + " uvařil(a) jídlo " + meal.getName()));
 
 		float portionPrice = meal.getPortionPrice();
 		for (Portion portion : meal.getPortions()) {
 			transactionRepository.save(new Transaction(portion.getDiner(), -portion.getCount() * portionPrice,
-					portion.getDiner().getName() + " " + portion.getDiner().getName() + " jedl " + portion.getCount()
-							+ " jídla " + meal.getName()));
+					portion.getDiner().getName() + " " + portion.getDiner().getSurname() + " jedl(a) "
+							+ portion.getCount() + " ks jídla " + meal.getName()));
 		}
 
 		return true;
@@ -49,6 +51,24 @@ public class TransactionsServiceImpl implements TransactionsService {
 	public List<Transaction> getTransactions() {
 		return Lists.newArrayList(transactionRepository.findAll(new Sort(Direction.DESC, "id")));
 
+	}
+
+	@Override
+	public Map<Long, Float> getTransactionsSumSortedByUserId() {
+		List<Transaction> transactions = getTransactions();
+		Map<Long, Float> sortedTransSum = new HashMap<>();
+		Float sum;
+		for (Transaction transaction : transactions) {
+			sum = sortedTransSum.get(transaction.getUser().getId());
+			if (sum == null) {
+				sum = new Float(transaction.getMoney());
+			} else {
+				sum += transaction.getMoney();
+			}
+			sortedTransSum.put(transaction.getUser().getId(), sum);
+		}
+
+		return sortedTransSum;
 	}
 
 }

@@ -10,6 +10,7 @@ import com.google.common.collect.Lists;
 
 import cz.stambrecht.mealmanager.model.User;
 import cz.stambrecht.mealmanager.repositories.UserRepository;
+import cz.stambrecht.mealmanager.services.TransactionsService;
 import cz.stambrecht.mealmanager.services.UsersService;
 
 @Service

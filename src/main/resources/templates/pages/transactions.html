@@ -25,7 +25,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="transaction : ${transactions}" class="clickable-row">
-				<td/>
+				<td th:text="${transaction.getUser().getName() + ' ' + transaction.getUser().getSurname()}"></td>
 				<td th:text="${transaction.getDescription()}" />
 				<td th:text="${transaction.getMoney() + ' Kč'}" />
 			</tr>
