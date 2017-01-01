@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '1.4.1.RELEASE'
+		springBootVersion = '1.4.3.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -13,11 +13,18 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
+apply plugin: 'war'
 
 jar {
 	baseName = 'meal-manager'
 	version = '0.0.1-SNAPSHOT'
 }
+
+war {
+   baseName = 'meal-manager'
+   version =  '0.0.1'
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -36,5 +43,6 @@ dependencies {
 	compile 'com.google.guava:guava:20.0'
 	compile("org.springframework:spring-web")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	 compile("org.springframework.boot:spring-boot-devtools")
+	compile("org.springframework.boot:spring-boot-devtools")
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
