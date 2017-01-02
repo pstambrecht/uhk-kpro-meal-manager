@@ -17,12 +17,12 @@ apply plugin: 'war'
 
 jar {
 	baseName = 'meal-manager'
-	version = '0.0.1-SNAPSHOT'
+	version = '0.0.3-SNAPSHOT'
 }
 
 war {
    baseName = 'meal-manager'
-   version =  '0.0.1'
+   version =  '0.0.3'
 }
 
 sourceCompatibility = 1.8
@@ -32,7 +32,6 @@ repositories {
 	mavenCentral()
 	maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
 }
-
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
@@ -44,5 +43,6 @@ dependencies {
 	compile("org.springframework:spring-web")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	compile("org.springframework.boot:spring-boot-devtools")
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-core:8.5.9'
+	providedRuntime 'org.apache.tomcat.embed:tomcat-embed-el:8.5.9'	
 }
